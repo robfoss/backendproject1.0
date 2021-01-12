@@ -1,7 +1,9 @@
 const { layout } = require('../utils');
 const nodemailer = require("nodemailer");
 const { Assignment, Agent, Note, Lead } = require('../models');
-const agent = require('./agent');
+const express = require('express');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 require('dotenv').config();  
 
 
@@ -404,59 +406,96 @@ function getState(zip) {
     return state;
   }
 
-  const findAgentsForState = async (leadState) =>{
-    const agents = await Agent.findAll({
-        where: {
-            state: leadState,
-        }
-
-    })
-    return agents;
-}  
+   
 
 const processForm = async (req, res) => {
+    res.redirect('/')
+    
     const { concern, savings, age, zip, firstName, lastName, email, phone } = req.body;
+    const { id } = req.params
     const data = {
         concern,
         savings,
         age,
         zip
+    }   
+    //LEAD CREATION
+    const newLead = await Lead.create({
+        concern,
+        savings,
+        age,
+        zip,
+        firstname: firstName,
+        lastname: lastName,
+        email,
+        phone,
+        id     
+    })
+
+    // console.log(newLead.id);
+    const leadState = getState(newLead.zip);
+    // console.log(leadState)
+    
+    //FIND THE AGENT FOR STATE
+    const findAgentsForState = async (leadState) =>{
+        const agents = await Agent.findAll({
+            where: {
+                state: leadState,
+            }
+    
+        })
+        return agents;
     }
-    const leadState = getState(data.zip);
-    const agents = await findAgentsForState(leadState);
 
-    const formdata = `${data.concern}`
-    console.log(leadState);
-    console.log(agents);
-
-
-
-    let transporter = nodemailer.createTransport({
-        service: process.env.SERVICE,
-        // host: "",
-        port: 465,
-        secure: false, // true for 465, false for other ports
-        auth: {
-          user: process.env.EMAIL, // generated ethereal user
-          pass: process.env.PASSWORD, // generated ethereal password
-        },
-      });
     
-      // send mail with defined transport object
-      let info = await transporter.sendMail({
-        from: process.env.EMAIL, // sender address
-        to: "robfoss@rocketmail.com", // list of receivers
-        subject: "New Lead", // Subject line
-        text: "Hello world?", // plain text body
-        html: formdata, // html body
-      });
+    const assignmentCreation = async (req, res) =>{
+        const agents = await findAgentsForState(leadState)
+        console.log(agents)
+        const agentIds = await agents.map((agent) => agent.dataValues.id)
+        const agentEmails = await agents.map((agent) => agent.dataValues.email)
     
-      console.log("Message sent: %s", info.messageId);
-     
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-     
+        for(let i = 0; i < agents.length; i++){
+            await Assignment.create({
+                leadId: newLead.id,
+                agentId: agentIds[i]
+            });
+            // const emailList = agentEmails.join();
+            console.log(agentEmails);
+            sendEmails(agentEmails);
+        }
+    }
+    
+        //SEND EMAIL(agents)
+    const sendEmails = async (emailList)=>{
+        
 
-    res.send('Thanks')
+        let transporter = nodemailer.createTransport({
+            service: process.env.SERVICE,
+            // host: "",
+            port: 465,
+            secure: false, // true for 465, false for other ports
+            auth: {
+              user: process.env.EMAIL, 
+              pass: process.env.PASSWORD,
+            },
+          });
+          console.log('******** Transporter.sendmail *******')
+        
+          // send mail with defined transport object
+          let info = await transporter.sendMail({
+            from: process.env.EMAIL, // sender address
+            to: emailList, // list of receivers
+            subject: "New Lead", // Subject line
+            text: "Hello world?", // plain text body
+            html: JSON.stringify(data), // html body
+          });
+        
+          console.log("Message sent: %s", info.messageId);
+         
+          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    }
+    assignmentCreation(); 
+    
 }
 
 module.exports = {
@@ -484,8 +523,7 @@ module.exports = {
     beachretirement,
     retirementgotchas,
     balancedportfolio,
-    processForm
+    processForm,
 
 
 }
-

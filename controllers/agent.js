@@ -1,6 +1,9 @@
 const { layout } = require('../utils')
+const express = require('express')
 const bcrypt = require('bcryptjs');
 const { Agent, Assignment, Note, Lead } = require('../models');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 
 
 const agentlogin = (req, res) =>{
@@ -22,7 +25,8 @@ const signup = (req, res) => {
 }
 
 const processAgentSignup = async (req, res) => {
-    const {firstName, lastName, zip, state, email, phone, password} = req.body;
+    const { firstName, lastName, zip, state, email, phone, password } = req.body;
+    
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
     try {
@@ -33,7 +37,8 @@ const processAgentSignup = async (req, res) => {
             zip,
             hash,
             state,
-            phone
+            phone,
+        
         });
         console.log(newAgent)
         res.redirect('/login')
@@ -53,7 +58,6 @@ const processLogin = async (req, res) => {
     const agent = await Agent.findOne({
         where: {
             email,
-            password
         }
     });
     if(agent) {

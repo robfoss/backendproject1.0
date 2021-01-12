@@ -18,15 +18,18 @@ module.exports = {
         type: Sequelize.STRING
       },
       phone: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       age: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       concern: {
         type: Sequelize.STRING
       },
       savings: {
+        type: Sequelize.STRING
+      },
+      zip: {
         type: Sequelize.STRING
       },
       createdAt: {

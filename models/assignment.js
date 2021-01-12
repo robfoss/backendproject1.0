@@ -20,8 +20,21 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Assignment.init({
-    agentId: DataTypes.INTEGER,
-    leadId: DataTypes.INTEGER
+    agentId:{
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Agent',
+        key: 'id'
+      }
+    },
+     
+    leadId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Lead',
+        key: 'id',
+      }
+    }
   }, {
     sequelize,
     modelName: 'Assignment',
