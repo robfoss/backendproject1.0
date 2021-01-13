@@ -57,6 +57,7 @@ const {
 app.use('/', categoryRouter);
 app.use('/category', categoryRouter);
 app.use('/agent', agentRouter)
+app.use('/agenthome', agentRouter)
 app.use('/send', categoryRouter)
 // app.use('/agentsigup', agentRouter)
 // app.use('/agentlogin', agentRouter)
@@ -71,5 +72,5 @@ app.use('/send', categoryRouter)
 
 
 server.listen(PORT, HOST, () => {
-    console.log('Swag');
+    console.log(`Listening on port: ${PORT}`);
 });

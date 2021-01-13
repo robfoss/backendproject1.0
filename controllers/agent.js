@@ -24,9 +24,79 @@ const signup = (req, res) => {
     })
 }
 
+const agenthome = async (req, res) => {
+    const { id } = req.session.agent;
+    // const agent = await Agent.findOne({
+    //     include: [Lead]
+    // });
+    if(id) {
+        const assignments = await Assignment.findAll({
+            
+            where: {
+                agentId: id,
+            },
+        })
+        console.log(assignments.length)
+        const findLead = async (agentId, leadId)=>{
+           return await Lead.findAll({
+                where: {
+                        agentId: agentId,
+                        id: leadId
+                    }
+            })
+        }
+        // const returnLead = async (agentId, leadId) =>{
+        //     return await findLead(agentId, leadId)
+        // }
+        
+        const getData = async()=>{
+           return await Promise.all(assignments.map(async assignment =>  await findLead(assignment.agentId, assignment.leadId)))
+        }
+        let leads = await getData();
+        leads = leads.flat()
+        console.log(leads)
+
+        // const leads = assignments.map(assignment => {
+        //     const lead = Lead.findOne({
+        //         where: {
+        //             agentId: assignment.agentId,
+        //             id: assignment.leadId
+        //         }
+        //     })
+        // })
+        
+        // const lead = Lead.findOne({
+        //     where: {
+        //         agentId: assignment.agentId,
+        //         id: assignment.leadId
+        //     }
+        // })
+        // const leads = assignments.map( async assignment => {
+        //     const lead = await Lead.findOne({
+        //         where: {
+        //             agentId: assignment.agentId,
+        //             id: assignment.leadId
+        //         }
+
+        //     });
+        //     return lead
+        // })
+        // console.log(leads)
+        res.render('agenthome', {
+        locals: {
+        leads,
+        title: 'Agent Page'
+        },
+        ...layout
+        })
+    } else {
+        res.redirect('/login')
+    }    
+}
+
+
 const processAgentSignup = async (req, res) => {
     const { firstName, lastName, zip, state, email, phone, password } = req.body;
-    
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
     try {
@@ -40,8 +110,7 @@ const processAgentSignup = async (req, res) => {
             phone,
         
         });
-        console.log(newAgent)
-        res.redirect('/login')
+        res.redirect(`${req.baseUrl}/agenthome`);
 
     } catch(err){
         console.log(err)
@@ -51,30 +120,35 @@ const processAgentSignup = async (req, res) => {
         res.redirect('/signup')
     }
 
-}
+};
 
 const processLogin = async (req, res) => {
     const { email, password } = req.body;
+    // const { id } = req.session.user;
     const agent = await Agent.findOne({
         where: {
-            email,
+            email
         }
     });
     if(agent) {
+        console.log('valid agent email')
         const isValid = bcrypt.compareSync(password, agent.hash);
         if(isValid) {
+            console.log('password works')
             req.session.agent = {
                 email,
                 id: agent.id
             };
-            req.session.save(()=>{
-                res.redirect('/list')
+            req.session.save(()=> {
+                res.redirect(`${req.baseUrl}/agenthome`)
             });
         } else {
             console.log('wrong password')
+            res.redirect(`${req.baseUrl}/login`)
         }        
     } else {
-        res.redirect('/login');
+        console.log('agent not valid')
+        res.redirect(`${req.baseUrl}/login`);
     }
 };
 
@@ -86,8 +160,10 @@ const logout = (req, res) => {
 
 module.exports = {
     agentlogin,
+    agenthome,
     signup,
     processAgentSignup,
     processLogin,
-    logout
+    logout,
+   
 }

@@ -32,6 +32,9 @@ module.exports = {
       zip: {
         type: Sequelize.STRING
       },
+      agentId: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

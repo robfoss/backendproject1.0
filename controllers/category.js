@@ -440,7 +440,7 @@ const processForm = async (req, res) => {
     const findAgentsForState = async (leadState) =>{
         const agents = await Agent.findAll({
             where: {
-                state: leadState,
+                state: leadState,//Look at Sam's ilike %solution
             }
     
         })
@@ -479,7 +479,6 @@ const processForm = async (req, res) => {
               pass: process.env.PASSWORD,
             },
           });
-          console.log('******** Transporter.sendmail *******')
         
           // send mail with defined transport object
           let info = await transporter.sendMail({
@@ -524,6 +523,4 @@ module.exports = {
     retirementgotchas,
     balancedportfolio,
     processForm,
-
-
 }

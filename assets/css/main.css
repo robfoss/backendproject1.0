@@ -4460,8 +4460,8 @@
 		padding: 35px 25px;
 }
 
-.form-popup.closeform .box .form {
-		position: absolute;
+.form-popup .box .form .closeform{
+		position: relative;
 		right: 5px;
 		top: 0px;
 		font-size: 30px;
