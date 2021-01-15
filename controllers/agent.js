@@ -36,16 +36,13 @@ const agenthome = async (req, res) => {
                 agentId: id,
             },
         })
-        console.log("length is ", assignments.length)
         const findLead = async (agentId, leadId)=>{
            const test = await Lead.findAll({
                 where: {
                         id: leadId
                     }
             })
-            console.log('***************')
-            console.log(JSON.stringify(test, null, 4))
-            console.log('***************')
+            
             return test
         }
         // const returnLead = async (agentId, leadId) =>{
@@ -57,7 +54,6 @@ const agenthome = async (req, res) => {
         }
         let leads = await getData();
         leads = leads.flat()
-        console.log(leads)
 
         res.render('agenthome', {
         locals: {
@@ -137,11 +133,18 @@ const logout = (req, res) => {
 
 const del = async (req, res) => {
     const { id } = req.session.agent;
+    const { leadId } = req.body
+    console.log("************************",req.body)
     if(id){
-        const lead = await Assignment.destroy({
+        // const lead = await Lead.findAll({
+        //     where: {
+        //         agentId: id
+        //     }
+        // })
+        const destroyLead = await Assignment.destroy({
             where: {
                 agentId: id,
-                leadId: id
+                leadId
             }
         });
         console.log('Assignment Destoryed')

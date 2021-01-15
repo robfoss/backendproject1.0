@@ -38,8 +38,10 @@
                                     <p>${lead.age}</p>
                                     <p>${lead.phone}</p>
                                     <p>${lead.email}</p>
-                                    <form method="POST" action="/agenthome/delete">
+									<form method="POST" action="/agent/agenthome">
+										<input name="leadId" value="${lead.id}" style="display: none;">
 										<input type="submit" value="Delete">
+										
 									</form>
                                 </div>
                             </div>

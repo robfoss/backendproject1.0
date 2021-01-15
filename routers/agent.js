@@ -13,7 +13,7 @@ router.get('/signup', agentController.signup)
 router.post('/signup', agentController.processAgentSignup)
 
 router.get('/agenthome', agentController.agenthome);
-router.post('/delete', agentController.del);
+router.post('/agenthome', agentController.del);
 
 
 
