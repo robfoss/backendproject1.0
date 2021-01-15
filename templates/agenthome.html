@@ -10,15 +10,15 @@
 
 		<!-- Header -->
 			<header id="header">
-				<div class="logo"><a href="index.html">Hielo <span>by TEMPLATED</span></a></div>
+				<div class="logo"><a href="/"></div>
 				<a href="#menu">Menu</a>
 			</header>
 
 		<!-- Nav -->
 			<nav id="menu">
 				<ul class="links">
-					<li><a href="/user/index">Home</a></li>
-					<li><a href="/logout">Logout</a></li>
+					<li><a href="/">Home</a></li>
+					<li><a href="/agent/logout">Logout</a></li>
 				</ul>
 			</nav>
 
@@ -28,7 +28,7 @@
                 <div class="grid-style">
                     ${
                         leads.map(lead =>`<div>
-                            <div class="box">
+                            <div class="box shadow2">
                                 <div class="content">
                                     <header class="align-center">
                                         <h2>${lead.firstname} ${lead.lastname}</h2>
@@ -38,7 +38,9 @@
                                     <p>${lead.age}</p>
                                     <p>${lead.phone}</p>
                                     <p>${lead.email}</p>
-                                    
+                                    <form method="POST" action="/agenthome/delete">
+										<input type="submit" value="Delete">
+									</form>
                                 </div>
                             </div>
                         </div>
@@ -57,14 +59,13 @@
 					<div class="box">
 						<div class="content">
 							<header class="align-center">
-								<p>maecenas sapien feugiat ex purus</p>
-								<h2>Lorem ipsum dolor</h2>
+								<p></p>
+								<h2></h2>
 							</header>
 							
 						</div>
 					</div>
 				</div>
 			</section>
-
 		<!-- Footer -->
 ${footer}

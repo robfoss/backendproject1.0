@@ -1,3 +1,5 @@
+require('dotenv').config(); 
+
 const { layout } = require('../utils')
 const express = require('express')
 const bcrypt = require('bcryptjs');
@@ -26,9 +28,7 @@ const signup = (req, res) => {
 
 const agenthome = async (req, res) => {
     const { id } = req.session.agent;
-    // const agent = await Agent.findOne({
-    //     include: [Lead]
-    // });
+ 
     if(id) {
         const assignments = await Assignment.findAll({
             
@@ -36,14 +36,17 @@ const agenthome = async (req, res) => {
                 agentId: id,
             },
         })
-        console.log(assignments.length)
+        console.log("length is ", assignments.length)
         const findLead = async (agentId, leadId)=>{
-           return await Lead.findAll({
+           const test = await Lead.findAll({
                 where: {
-                        agentId: agentId,
                         id: leadId
                     }
             })
+            console.log('***************')
+            console.log(JSON.stringify(test, null, 4))
+            console.log('***************')
+            return test
         }
         // const returnLead = async (agentId, leadId) =>{
         //     return await findLead(agentId, leadId)
@@ -56,32 +59,6 @@ const agenthome = async (req, res) => {
         leads = leads.flat()
         console.log(leads)
 
-        // const leads = assignments.map(assignment => {
-        //     const lead = Lead.findOne({
-        //         where: {
-        //             agentId: assignment.agentId,
-        //             id: assignment.leadId
-        //         }
-        //     })
-        // })
-        
-        // const lead = Lead.findOne({
-        //     where: {
-        //         agentId: assignment.agentId,
-        //         id: assignment.leadId
-        //     }
-        // })
-        // const leads = assignments.map( async assignment => {
-        //     const lead = await Lead.findOne({
-        //         where: {
-        //             agentId: assignment.agentId,
-        //             id: assignment.leadId
-        //         }
-
-        //     });
-        //     return lead
-        // })
-        // console.log(leads)
         res.render('agenthome', {
         locals: {
         leads,
@@ -158,12 +135,26 @@ const logout = (req, res) => {
     });
 };
 
+const del = async (req, res) => {
+    const { id } = req.session.agent;
+    if(id){
+        const lead = await Assignment.destroy({
+            where: {
+                agentId: id,
+                leadId: id
+            }
+        });
+        console.log('Assignment Destoryed')
+        res.redirect('/agent/agenthome');
+    }
+}
+
 module.exports = {
     agentlogin,
     agenthome,
     signup,
     processAgentSignup,
     processLogin,
-    logout,
-   
+    logout, 
+    del  
 }

@@ -1,4 +1,4 @@
-const { layout } = require('../utils');
+const { layout, leadMail } = require('../utils');
 const nodemailer = require("nodemailer");
 const { Assignment, Agent, Note, Lead } = require('../models');
 const express = require('express');
@@ -434,16 +434,17 @@ const processForm = async (req, res) => {
 
     // console.log(newLead.id);
     const leadState = getState(newLead.zip);
-    // console.log(leadState)
+    console.log(leadState)
     
     //FIND THE AGENT FOR STATE
     const findAgentsForState = async (leadState) =>{
         const agents = await Agent.findAll({
             where: {
-                state: leadState,//Look at Sam's ilike %solution
+                state: leadState,
             }
     
         })
+        console.log(agents)
         return agents;
     }
 
@@ -452,6 +453,7 @@ const processForm = async (req, res) => {
         const agents = await findAgentsForState(leadState)
         console.log(agents)
         const agentIds = await agents.map((agent) => agent.dataValues.id)
+        
         const agentEmails = await agents.map((agent) => agent.dataValues.email)
     
         for(let i = 0; i < agents.length; i++){
@@ -497,6 +499,15 @@ const processForm = async (req, res) => {
     
 }
 
+const formlander = (req, res) =>{
+    res.render('formlanding', {
+        locals: {
+           title: 'Speak With a Licensed Professional'
+        },
+        ...layout
+    })
+}
+
 module.exports = {
     home,
     annuities,
@@ -523,4 +534,5 @@ module.exports = {
     retirementgotchas,
     balancedportfolio,
     processForm,
+    formlander
 }

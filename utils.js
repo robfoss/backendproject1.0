@@ -6,6 +6,12 @@ const layout = {
     }
 }
 
+const leadMail = {
+    email: '/templates/newleademail'
+}
+
 module.exports = {
     layout,
+    leadMail
+
 }

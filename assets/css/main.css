@@ -1879,6 +1879,12 @@
 	.shadow {
 		box-shadow: 5px 5px 7px #888888;
 	}
+	.shadow2 {
+		-webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+		-moz-box-shadow:    3px 3px 5px 6px #ccc;  /* Firefox 3.5 - 3.6 */
+		box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+	  }
+
 
 /* Button */
 
@@ -1985,8 +1991,8 @@
 	input[type="button"],
 	button,
 	.button {
-		background-color: #f2f2f2;
-		color: rgb(0, 0, 0) !important;
+		background-color: #2b46bd;
+		color: rgb(255, 255, 255) !important;
 	}
 
 		input[type="submit"]:hover,
@@ -1994,7 +2000,7 @@
 		input[type="button"]:hover,
 		button:hover,
 		.button:hover {
-			background-color: white;
+			background-color: rgb(76, 168, 243);
 		}
 
 		input[type="submit"]:active,
@@ -2002,7 +2008,7 @@
 		input[type="button"]:active,
 		button:active,
 		.button:active {
-			background-color: #e5e5e5;
+			background-color: #0cccee;
 		}
 
 		input[type="submit"].alt,
@@ -3180,7 +3186,7 @@
 			}
 
 			.wrapper.style3 a {
-				color: #8a4680;
+				color: #ffffff;
 			}
 
 			.wrapper.style3 strong, .wrapper.style3 b {
@@ -4234,7 +4240,7 @@
 				}
 
 			.banner > article h2 {
-				font-size: 7rem;
+				font-size: 5rem;
 				margin-bottom: 0;
 				color: #FFF;
 				font-weight: 300;
@@ -4358,8 +4364,9 @@
 
 	#footer {
 		padding: 4rem 0 2rem 0 ;
-		background: #000;
+		background: rgb(1, 41, 94);
 		text-align: center;
+		color: #ffffff;
 	}
 
 		#footer a {
@@ -4371,7 +4378,7 @@
 			}
 
 		#footer .copyright {
-			color: #bbb;
+			color: rgb(255, 255, 255);
 			font-size: 0.9rem;
 			margin: 0 0 2rem 0;
 			padding: 0;
@@ -4403,7 +4410,7 @@
 }
 
 .form-popup .box {
-		width: 750px;
+		width: 600px;
 		position: absolute;
 		left: 50%;
 		top: 50%;
@@ -4431,7 +4438,7 @@
 
 }
 	
-.form-popup .box .img-area .img{
+.form-popup .popupbox .img-area .img{
 		flex: 0 0 50%;
 		max-width: 50%;
 		position: absolute;
@@ -4454,30 +4461,29 @@
 	}
 }
 
-.form-popup .box .form{
+.form-popup .popupbox .form{
 		flex: 0 0 50%;
 		max-width: 50%;
 		padding: 35px 25px;
 }
 
-.form-popup .box .form .closeform{
-		position: relative;
-		right: 5px;
+.form-popup .closeform .popupbox {
+		position: absolute;
+		right: 10px;
 		top: 0px;
-		font-size: 30px;
-		cursor: pointer;
+		font-size: 50px;
 
 }
 
 	/* responsive */
 @media(max-width: 767px){
-	.form-popup .box{
+	.form-popup .popupbox{
 			width: calc(100% - 30px);
 	}
-	.form-popup .box .img-area{
+	.form-popup .popupbox .img-area{
 			display: none;
 	}
-	.form-popup .box .form{
+	.form-popup .popupbox .form{
 			flex: 0 0 100%;
 			max-width: 100%;
 	}

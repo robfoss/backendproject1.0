@@ -6,7 +6,7 @@ window.addEventListener("load", function(){
     setTimeout(function(){
         formPopup.classList.add("show")
 
-    }, 5000)
+    }, 9000)
 });
 
 // const showPopup = () =>{

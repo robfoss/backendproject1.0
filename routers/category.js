@@ -28,6 +28,9 @@ router.get('/beachretirement', categoryController.beachretirement);
 router.get('/retirementgotchas', categoryController.retirementgotchas);
 router.get('/balancedportfolio', categoryController.balancedportfolio)
 
+router.get('/formlanding', categoryController.formlander);
+router.post('/formlanding', categoryController.processForm)
+
 router.post('/send',categoryController.processForm);
 
 
